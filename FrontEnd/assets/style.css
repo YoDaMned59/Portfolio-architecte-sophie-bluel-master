@@ -224,12 +224,24 @@ li:hover {
 	margin-bottom: 1em;
 }
 .div-container {
-	width: 70%;
+	width: 50%;
+	min-width: 550px;
 	display: flex;
 	justify-content: space-around;
-	margin: 0 auto;
+	margin: 35px auto;
 }
-
+.div-container > * {
+	padding: 10px 20px;
+	font-family: 'Syne';
+	border: 1px solid rgba(29, 97, 84, 1);
+	border-radius: 25px;
+	color: #1D6154;
+	cursor: pointer;	
+}
+.div-container > *:hover{
+	background-color: rgba(29, 97, 84, 1);
+	color: white;
+}
 .gallery {
 	width: 100%;
 	display: grid;
