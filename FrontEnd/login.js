@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Vérifie si la réponse indique une erreur
                 if (!response.ok) {
-                    throw new Error(responseData.message || 'Identifiants invalides'); // Affiche un message d'erreur
+                    throw new Error(responseData.message || 'Mot de passe invalide'); // Affiche un message d'erreur
                 }
 
                 // Stocke le token d'authentification dans localStorage
