@@ -1,71 +1,105 @@
-// Requête fetch pour récupérer les données depuis l'API
-fetch('http://localhost:5678/api/works')
-  .then(response => {
+async function fetchCategories() {
+  try {
+    const response = await fetch('http://localhost:5678/api/categories')
     if (!response.ok) {
-      throw new Error(`Erreur : ${response.status}`)
+      throw new Error('Erreur lors de la récupération des catégories')
     }
-    return response.json()
-  })
-  .then(data => {
-    // Appel de la fonction pour afficher les données dans le HTML
-    afficherWorks(data)
-  })
-  .catch(error => {
-    console.error('Erreur lors de la requête :', error)
-  })
+    const categories = await response.json()
+    console.log('Catégories récupérées:', categories)
+    return categories
+  } catch (error) {
+    console.error('Erreur:', error)
+  }
+}
 
-// Fonction pour afficher les données dans le DOM
-function afficherWorks(works) {
-  const worksList = document.getElementById('works-list')
+async function fetchWorks() {
+  try {
+    const response = await fetch('http://localhost:5678/api/works');
+    if (!response.ok) {
+      throw new Error('Erreur lors de la récupération des œuvres')
+    }
+    const works = await response.json()
 
-  // Pour chaque "work", créer un élément HTML (figure) et l'ajouter au DOM
-  works.forEach(work => {
-    const figure = document.createElement('figure')
+    return works
+  } catch (error) {
+    console.error('Erreur:', error)
+  }
+}
 
-    // Ajoute une image avec la source de l'API et le texte alternatif
-    const img = document.createElement('img')
-    img.src = work.imageUrl
-    img.alt = work.title
+async function initialize() {
+  const categories = await fetchCategories()
+  const works = await fetchWorks()
+  createCategoryButtons(categories, works)
+  displayData(works)
+}
 
-    // Crée un figcaption avec le titre du projet
-    const paragraph = document.createElement('p')
-    paragraph.textContent = work.title
+function createCategoryButtons(categories, works) {
+  const buttonContainer = document.getElementById('button-container')
 
-    // Ajoute l'image et la légende à la figure
-    figure.appendChild(img)
-    figure.appendChild(paragraph)
-    worksList.appendChild(figure)
+  // Ajouter un bouton "Tous" pour afficher toutes les images en premier
+  const allButton = document.createElement('button')
+  allButton.textContent = 'Tous'
+  allButton.setAttribute('data-category', 'all')
+  allButton.addEventListener('click', () => displayData(works))
+  buttonContainer.appendChild(allButton)
+
+  // Créer un bouton pour chaque catégorie
+  categories.forEach(category => {
+    const button = document.createElement('button')
+    button.textContent = category.name
+    button.setAttribute('data-category', category.id)
+
+    // Écouteur d'événement pour filtrer les images par catégorie
+    button.addEventListener('click', () => {
+      filterData(works, category.id)
+    });
+    buttonContainer.appendChild(button)
   })
 }
 
-/*filtres*/
-fetch('http://localhost:5678/api/categories')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`Erreur : ${response.status}`)
-    }
-    return response.json()
-  })
-  .then(data => {
-    afficherCategories(data)
-  })
-  .catch(error => {
-    console.error('Erreur lors de la requête :', error)
-  })
+function displayData(data) {
+  const container = document.getElementById('data-container');
+  container.innerHTML = ''
 
-  function afficherCategories(categories) {
-    const categoriesList = document.getElementById("filters")
-
-    categories.forEach(category => {
-      const div = document.createElement("div")
-      const p = document.createElement("p")
-      
-      p.textContent = category.name
-
-      div.appendChild(p)
-      categoriesList.appendChild(div)
-    })
+  if (data.length === 0) {
+    const message = document.createElement('p')
+    message.textContent = "Aucune œuvre à afficher pour cette catégorie."
+    container.appendChild(message)
+    return
   }
+
+  data.forEach(item => {
+    // Créer un élément figure pour chaque image
+    const figure = document.createElement('figure')
+
+    // Affichage de l'image de l'élément
+    const img = document.createElement('img')
+    img.src = item.imageUrl
+    img.alt = item.title 
+    figure.appendChild(img)
+
+    // Affichage du titre de l'élément comme légende
+    const caption = document.createElement('figcaption');
+    caption.textContent = item.title
+    figure.appendChild(caption)
+
+    container.appendChild(figure)
+  });
+}
+
+function filterData(data, categoryId) {
+  // Filtrer les œuvres en fonction de l'ID de la catégorie
+  const filteredData = categoryId === 'all' ? data : data.filter(item => {
+    return item.categoryId === categoryId; // Comparer avec categoryId
+  })
+  displayData(filteredData);
+}
+
+// Initialiser l'application
+initialize()
+
+
+
 
 
 

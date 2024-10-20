@@ -17,11 +17,11 @@
 <body>
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-		<nav>
+		<nav class="headerItem">
 			<ul>
-				<li>projets</li>
-				<li>contact</li>
-				<li><a href="login.html">login</li></a>
+				<li><a href="#portfolio">projets</a></li>
+				<li><a href="#contact">contact</a></li>
+				<li><a href="login.html">login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -44,13 +44,12 @@
 		</section>
 		<section id="portfolio">
 			<h2>Mes Projets</h2>
-			<section id="filters" class="div-container">
-				<div>Tous</div>
-			</section>
-			<section id="category">
-			</section>
-
-			<div id="works-list" class="gallery">
+			<div id="button-container" class="div-container">
+				<!-- Les boutons pour filtrer par catégorie seront insérés ici -->
+			</div>
+			
+			<div id="data-container" class="gallery">
+				<!-- Les éléments filtrés (y compris les images) s'afficheront ici -->
 			</div>
 		</section>
 		<section id="contact">
