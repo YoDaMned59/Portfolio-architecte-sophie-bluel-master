@@ -127,10 +127,3 @@ function toggleEditDiv(authToken) {
       }
   }
 }
-
-
-
-
-
-
-
