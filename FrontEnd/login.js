@@ -2,36 +2,33 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.querySelector('.loginForm')
     const errorMessage = document.getElementById('error-message')
+    const editModeDiv = document.querySelector('.edit')
 
     // Vérifie si l'utilisateur est déjà connecté
     if (localStorage.getItem('authToken')) {
         window.location.href = 'index.html'
     }
-
     // Vérifie si le formulaire de connexion existe
     if (loginForm) {
-        // Ajoute un écouteur d'événements pour la soumission du formulaire
         loginForm.addEventListener('submit', async function (event) {
-            event.preventDefault(); // Empêche la soumission par défaut
+            event.preventDefault()
 
             // Récupère les valeurs des champs email et mot de passe
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('pass').value;
+            const email = document.getElementById('email').value
+            const password = document.getElementById('pass').value
 
             try {
                 // Envoie les informations de connexion à l'API
                 const response = await fetch('http://localhost:5678/api/users/login', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', // Spécifie le type de contenu
-                        'Accept': 'application/json', // Accepte le format JSON en réponse
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                     },
-                    body: JSON.stringify({ email, password }), // Convertit les données en JSON
-                });
+                    body: JSON.stringify({ email, password })
+                })
 
-                const responseData = await response.json(); // Récupère les données de la réponse
-
-                // Vérifie si la réponse indique une erreur
+                const responseData = await response.json()
                 if (!response.ok) {
                     throw new Error(responseData.message || 'Mot de passe invalide')
                 }
@@ -44,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 // Affiche le message d'erreur
-                errorMessage.textContent = error.message;
+                errorMessage.textContent = error.message
                 errorMessage.style.display = 'block'
             }
         })
